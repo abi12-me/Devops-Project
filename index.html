@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DealX Carnival – Mega Sale</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+body{
+    background:#f1f3f6;
+    color:#222;
+}
+header{
+    background:#131921;
+    color:#fff;
+    padding:14px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.logo{
+    font-size:22px;
+    font-weight:bold;
+}
+.logo span{
+    color:#ff9900;
+}
+nav a{
+    color:#fff;
+    margin-left:25px;
+    text-decoration:none;
+    font-size:14px;
+}
+nav a:hover{
+    text-decoration:underline;
+}
+.search-bar{
+    background:#fff;
+    margin:20px auto;
+    max-width:900px;
+    display:flex;
+    border-radius:4px;
+    overflow:hidden;
+}
+.search-bar input{
+    flex:1;
+    padding:12px;
+    border:none;
+    outline:none;
+    font-size:14px;
+}
+.search-bar button{
+    padding:12px 25px;
+    border:none;
+    background:#ff9900;
+    cursor:pointer;
+    font-weight:bold;
+}
+.banner{
+    background:linear-gradient(to right,#2874f0,#1b5fd9);
+    color:#fff;
+    padding:40px;
+    margin:20px;
+    border-radius:6px;
+}
+.banner h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
+.banner p{
+    font-size:16px;
+    margin-bottom:20px;
+}
+.banner button{
+    padding:12px 24px;
+    background:#ff9900;
+    border:none;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.section{
+    margin:20px;
+}
+.section h2{
+    margin-bottom:15px;
+}
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:20px;
+}
+.product{
+    background:#fff;
+    padding:10px;
+    border-radius:4px;
+}
+.product img{
+    width:100%;
+    height: 200px;;
+    object-fit:cover;
+    margin-bottom:10px;
+}
+.product h3{
+    font-size:14px;
+    margin-bottom:6px;
+}
+.price{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+.offer{
+    color:#388e3c;
+    font-size:13px;
+    margin-bottom:10px;
+}
+.product button{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#2874f0;
+    color:#fff;
+    cursor:pointer;
+}
+footer{
+    background:#172337;
+    color:#fff;
+    padding:25px;
+    margin-top:40px;
+    text-align:center;
+    font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Deal<span>X</span> Carnival</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+</header>
+
+<div class="search-bar">
+    <input type="text" placeholder="Search for products, brands and more" id="search">
+    <button onclick="searchProduct()">Search</button>
+</div>
+
+<div class="banner">
+    <h1>DealX Carnival Mega Sale</h1>
+    <p>Limited time offers on top brands. Prices drop every hour.</p>
+    <button>Shop Now</button>
+</div>
+
+<div class="section">
+    <h2>Top Deals For You</h2>
+    <div class="products">
+        <div class="product">
+            <img src="mic.jpg">
+            <h3>Wireless Microphone</h3>
+            <div class="price">₹2,000</div>
+            <div class="offer">Extra 30% off</div>
+            <button onclick="addtocart('Wireless Microphone',2000)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="earbuds.jpg">
+            <h3>Wireless Headphones</h3>
+            <div class="price">₹2,499</div>
+            <div class="offer">Deal of the Day</div>
+            <button onclick="addtocart('Wireless Earbuds',2499)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="smartTV.jpg">
+            <h3>Smart LED TV</h3>
+            <div class="price">₹32,999</div>
+            <div class="offer">Festival Special</div>
+            <button onclick="addtocart('Smart LED TV',32999)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="laptop.jpg">
+            <h3>Laptop Thin & Light</h3>
+            <div class="price">₹54,999</div>
+            <div class="offer">Bank Offer Available</div>
+            <button onclick="addtocart('Laptop Pro Edition',54999)">Add to Cart</button>
+        </div>
+         <div class="product">
+            <img src="tablet.jpg">
+            <h3>Tablet</h3>
+            <div class="price">₹24,999</div>
+            <div class="offer">Deal of the Day</div>
+            <button onclick="addtocart('Tablet',24999)">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 DealX Carnival. All rights reserved.
+</footer>
+
+<script>
+function searchProduct(){
+    const value=document.getElementById("search").value.trim();
+    if(value===""){
+        alert("Please enter a product name");
+    }else{
+        alert("Searching for: "+value);
+    }
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        function addtocart(name, price) {
+            const item = { name, price };
+            cart.push(item);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("Added to cart");
+        }
+</script>
+
+</body>
+</html>

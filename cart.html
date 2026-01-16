@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DealX Carnival – Cart & Checkout</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+body{
+    background:#f1f3f6;
+    color:#222;
+}
+header{
+    background:#131921;
+    color:#fff;
+    padding:14px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.logo{
+    font-size:22px;
+    font-weight:bold;
+}
+.logo span{
+    color:#ff9900;
+}
+nav a{
+    color:#fff;
+    margin-left:25px;
+    text-decoration:none;
+    font-size:14px;
+}
+nav a:hover{
+    text-decoration:underline;
+}
+.container{
+    display:flex;
+    margin:20px;
+    gap:20px;
+}
+.cart{
+    flex:2;
+    background:#fff;
+    padding:20px;
+    border-radius:4px;
+}
+.cart h2{
+    margin-bottom:15px;
+}
+.item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+    padding-bottom:12px;
+    border-bottom:1px solid #ddd;
+}
+.total{
+    font-weight:bold;
+    text-align:right;
+    margin-top:15px;
+}
+.checkout{
+    flex:1;
+    background:#fff;
+    padding:20px;
+    border-radius:4px;
+}
+.checkout h2{
+    margin-bottom:15px;
+}
+input{
+    width:100%;
+    padding:10px;
+    margin-bottom:2px;
+    border:1px solid #ccc;
+    border-radius:3px;
+    font-size:14px;
+}
+input:focus{
+    border-color:#2874f0;
+    outline:none;
+}
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#2874f0;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:10px;
+}
+button:disabled{
+    background:#9bb7f0;
+    cursor:not-allowed;
+}
+.error{
+    font-size:12px;
+    color:red;
+    margin-bottom:8px;
+    display:none;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Deal<span>X</span> Carnival</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <div class="cart">
+        <h2>Your Cart</h2>
+
+        <div id="cartItems"></div>
+        <div class="total" id="totalamount"> </div>
+    </div>
+
+    <div class="checkout">
+        <h2>Checkout</h2>
+
+        <form id="checkoutForm">
+            <input type="text" id="name" placeholder="Full Name">
+            <div class="error" id="nameError">Enter your name</div>
+
+            <input type="text" id="email" placeholder="Email Address">
+            <div class="error" id="emailError">Enter valid @gmail.com email</div>
+
+            <input type="text" id="phone" placeholder="Mobile Number">
+            <div class="error" id="phoneError">Enter 10 digit numbers only</div>
+
+            <input type="text" id="address" placeholder="Delivery Address">
+            <div class="error" id="addressError">Enter delivery address</div>
+
+            <button type="submit" id="placeOrder" disabled>Place Order</button>
+        </form>
+    </div>
+
+</div>
+
+
+
+<script>
+    //Cart Functionality
+const cartItemsDiv = document.getElementById("cartItems");
+const totalDiv = document.getElementById("totalamount");
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let total = 0;
+
+if(cart.length === 0){
+    cartItemsDiv.innerHTML = "<p>Your cart is empty</p>";
+}else{
+    cart.forEach(item=>{
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<div>${item.name}</div><div>₹${item.price}</div>`;
+        cartItemsDiv.appendChild(div);
+        total += item.price;
+    });
+}
+
+totalDiv.textContent = "Total: ₹" + total;
+//Checkout Form Validation
+const form = document.getElementById("checkoutForm");
+const inputs = form.querySelectorAll("input");
+const button = document.getElementById("placeOrder");
+
+inputs.forEach(input => {
+    input.addEventListener("input", checkForm);
+    input.addEventListener("focus", () => {
+        const msg = input.nextElementSibling;
+        if(msg && msg.classList.contains("error")) msg.style.display = "none";
+    });
+});
+
+function checkForm(){
+    let valid = true;
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+
+    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const phonePattern = /^[0-9]{10}$/;
+
+    // hide all errors first
+    inputs.forEach(input=>{
+        const msg = input.nextElementSibling;
+        if(msg && msg.classList.contains("error")) msg.style.display = "none";
+    });
+
+    if(name === ""){
+        valid = false;
+        document.getElementById("nameError").style.display = "block";
+    }
+    if(!gmailPattern.test(email)){
+        valid = false;
+        document.getElementById("emailError").style.display = "block";
+    }
+    if(!phonePattern.test(phone)){
+        valid = false;
+        document.getElementById("phoneError").style.display = "block";
+    }
+    if(address === ""){
+        valid = false;
+        document.getElementById("addressError").style.display = "block";
+    }
+
+    button.disabled = !valid;
+}
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+    checkForm();
+    if(!button.disabled){
+        form.reset();
+        button.disabled = true;
+        fetch("http://localhost:5000/order", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        customer: {
+            name,
+            email,
+            phone,
+            address
+        },
+        cart,
+        total
+    })
+})
+.then(res => res.json())
+.then(data => {
+    localStorage.setItem("orderId", data.orderId);
+    localStorage.removeItem("cart");
+    window.location.href = "order_success.html";
+})
+.catch(() => alert("Order failed"));
+    }
+});
+</script>
+
+</body>
+</html>
