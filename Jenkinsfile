@@ -42,7 +42,8 @@ pipeline {
         stage('Run Application') {
             steps {
                 echo 'Starting Node server'
-                bat '"C:\\Users\\acer\\AppData\\Roaming\\npm\\pm2.cmd" start server.js'
+                bat '"C:\\Users\\acer\\AppData\\Roaming\\npm\\pm2.cmd" start server.js --interpreter "C:\\Program Files\\nodejs\\node.exe"'
+
             }
         }
     }
