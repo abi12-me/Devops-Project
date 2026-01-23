@@ -28,7 +28,7 @@ pipeline {
         stage('Build App') {
             steps {
                 echo 'Installing dependencies'
-                bat 'npm install'
+                 bat '"C:\\Program Files\\nodejs\\npm.cmd" install'
             }
         }
 
