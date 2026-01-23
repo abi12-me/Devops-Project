@@ -39,11 +39,11 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        stage('Deploy') {
             steps {
-                echo 'Starting Node server'
-                bat '"C:\\Users\\acer\\AppData\\Roaming\\npm\\pm2.cmd" start server.js --interpreter "C:\\Program Files\\nodejs\\node.exe"'
-
+                echo "Deploying application on port ${PORT}"
+                bat 'start /B "" "C:\\Program Files\\nodejs\\npm.cmd" start'
+                echo "Server running at http://localhost:${PORT}"
             }
         }
     }
