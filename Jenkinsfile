@@ -35,14 +35,15 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests'
-                bat 'npm test || echo No tests found, skipping...'
+                bat '"C:\\Program Files\\nodejs\\npm.cmd" test || echo No tests found, skipping...'
             }
         }
 
         stage('Run Application') {
             steps {
                 echo 'Starting Node server'
-                bat 'node server.js'
+               bat '"C:\\Program Files\\nodejs\\npm.cmd" install -g pm2'
+               bat '"C:\\Program Files\\nodejs\\pm2.cmd" start server.js'
             }
         }
     }
