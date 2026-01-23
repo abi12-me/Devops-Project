@@ -42,8 +42,7 @@ pipeline {
         stage('Run Application') {
             steps {
                 echo 'Starting Node server'
-               bat '"C:\\Program Files\\nodejs\\npm.cmd" install -g pm2'
-               bat '"C:\\Program Files\\nodejs\\pm2.cmd" start server.js'
+                bat '"C:\\Program Files\\nodejs\\node.exe" server.js &'
             }
         }
     }
